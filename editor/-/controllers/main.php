@@ -13,11 +13,11 @@ class Main extends \Controller
     {
         $cell = $this->cell = $this->unpackCell();
 
-        $this->instance_(underscore_model($cell->model));
+        $this->instance_($cell->xpack());
 
-        $this->dmap('<~|' . underscore_model_type($cell->model), 'data');
+        $this->dmap('<~|' . $cell->xpack(), 'indexes, editor');
 
-        $this->indexes = $this->data('data/indexes');
+        $this->indexes = $this->data('indexes');
     }
 
     public function reload()
@@ -30,7 +30,7 @@ class Main extends \Controller
         $v = $this->v('|');
 
         $cell = $this->cell;
-        $cellXPack = $this->xpackCell();
+        $cellXPack = $cell->xpack();
 
         $keyvals = (array)_j($cell->value());
 
@@ -100,7 +100,7 @@ class Main extends \Controller
 
         $this->css(':\css\std~');
 
-        $this->se(underscore_field($cell->model, $cell->field))->rebind(':reload');
+        $this->se($this->cell->underscore())->rebind(':reload');
 
         return $v;
     }

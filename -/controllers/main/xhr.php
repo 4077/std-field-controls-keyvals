@@ -7,9 +7,9 @@ class Xhr extends \Controller
     public function openDialog()
     {
         if ($cell = $this->unxpackCell()) {
-            $this->dmap('~|' . underscore_model_type($cell->model), 'data');
+            $this->dmap('~|' . $cell->xpack(), 'editor');
 
-            $titleCall = $this->data('data/calls/title');
+            $titleCall = $this->data('editor/calls/title');
 
             if ($titleCall) {
                 $titleCall = \ewma\Data\Data::tokenize($titleCall, [
@@ -20,7 +20,7 @@ class Xhr extends \Controller
             $this->c('\std\ui\dialogs~:open:props|' . $this->_nodeId('<'), [
                 'path'          => 'editor~:view',
                 'data'          => [
-                    'cell' => $this->data('cell')
+                    'cell' => $cell->pack()
                 ],
                 'pluginOptions' => [
                     'title' => $titleCall ? $this->_call($titleCall)->perform() : ''

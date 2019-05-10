@@ -1,23 +1,25 @@
 <?php namespace std\fieldControls\keyvals\controllers;
 
+// todo ws
+
 class Main extends \Controller
 {
-    private $model;
-
-    private $field;
+    /**
+     * @var \ewma\Data\Cell
+     */
+    private $cell;
 
     private $indexes;
 
     public function __create()
     {
-        $model = $this->model = $this->data['model'];
-        $field = $this->field = $this->data['field'];
+        $this->cell = $this->unpackCell();
 
-        $this->instance_(underscore_cell($model, $field));
+        $this->instance_($this->cell->xpack());
 
-        $this->dmap('|' . underscore_model_type($model), 'data');
+        $this->dmap('|', 'indexes, editor');
 
-        $this->indexes = $this->data('data/indexes');
+        $this->indexes = $this->data('indexes');
     }
 
     public function reload()
@@ -29,16 +31,13 @@ class Main extends \Controller
     {
         $v = $this->v('|');
 
-        $model = $this->model;
-        $field = $this->field;
-
-        $v->assign('CONTENT', $this->getContent($model, $field));
+        $v->assign('CONTENT', $this->getContent());
 
         $this->c('\std\ui button:bind', [
             'selector'                    => $this->_selector('|'),
             'path'                        => '>xhr:openDialog',
             'data'                        => [
-                'cell' => xpack_cell($model, $field)
+                'cell' => $this->cell->xpack()
             ],
             'eventTriggerClosestSelector' => '.cell'
         ]);
@@ -47,14 +46,14 @@ class Main extends \Controller
 
         $this->c('\std\ui\dialogs~:addContainer:' . $this->_nodeId());
 
-        $this->se(underscore_field($model, $field))->rebind(':reload');
+        $this->se($this->cell->underscore())->rebind(':reload');
 
         return $v;
     }
 
-    private function getContent($model, $field)
+    private function getContent()
     {
-        $keyvals = (array)_j($model->{$field});
+        $keyvals = (array)_j($this->cell->value());
 
         $keyIndex = $this->indexes['key'] ?? 'key';
         $valIndex = $this->indexes['val'] ?? 'val';

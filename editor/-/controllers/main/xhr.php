@@ -15,14 +15,14 @@ class Xhr extends \Controller
     {
         $this->cell = $this->unpackCell();
 
-        $this->dmap('<~|' . underscore_model_type($this->cell->model), 'data');
+        $this->dmap('<~|' . $this->cell->xpack(), 'indexes, editor');
 
-        $this->indexes = $this->data('data/indexes');
+        $this->indexes = $this->data('indexes');
     }
 
     private function performUpdateCallback()
     {
-        if ($updateCallback = $this->data('data/editor/callbacks/update')) {
+        if ($updateCallback = $this->data('editor/callbacks/update')) {
             $updateCallback = \ewma\Data\Data::tokenize($updateCallback, [
                 '%cell' => $this->unxpackCell()
             ]);
@@ -45,11 +45,9 @@ class Xhr extends \Controller
 
             $this->performUpdateCallback();
 
-            $this->se(underscore_field($cell->model, $cell->field))->trigger([
-                                                                                 'model' => $cell->model,
-                                                                                 'field' => $cell->field,
-                                                                                 'cell'  => $cell
-                                                                             ]);
+            $this->se($this->cell->underscore())->trigger([
+                                                              'cell' => $cell
+                                                          ]);
         }
     }
 
@@ -71,11 +69,9 @@ class Xhr extends \Controller
 
                     $this->performUpdateCallback();
 
-                    $this->se(underscore_field($cell->model, $cell->field))->trigger([
-                                                                                         'model' => $cell->model,
-                                                                                         'field' => $cell->field,
-                                                                                         'cell'  => $cell
-                                                                                     ]);
+                    $this->se($this->cell->underscore())->trigger([
+                                                                      'cell' => $cell
+                                                                  ]);
 
                     $this->c('\std\ui\dialogs~:close:deleteConfirm|' . $this->_nodeId('<'));
                 } else {
@@ -114,11 +110,9 @@ class Xhr extends \Controller
 
                 $this->performUpdateCallback();
 
-                $this->se(underscore_field($cell->model, $cell->field))->trigger([
-                                                                                     'model' => $cell->model,
-                                                                                     'field' => $cell->field,
-                                                                                     'cell'  => $cell
-                                                                                 ]);
+                $this->se($this->cell->underscore())->trigger([
+                                                                  'cell' => $cell
+                                                              ]);
             }
         }
     }
@@ -139,11 +133,9 @@ class Xhr extends \Controller
 
                 $this->performUpdateCallback();
 
-                $this->se(underscore_field($cell->model, $cell->field))->trigger([
-                                                                                     'model' => $cell->model,
-                                                                                     'field' => $cell->field,
-                                                                                     'cell'  => $cell
-                                                                                 ]);
+                $this->se($this->cell->underscore())->trigger([
+                                                                  'cell' => $cell
+                                                              ]);
             }
         }
     }
@@ -161,11 +153,9 @@ class Xhr extends \Controller
 
             $this->performUpdateCallback();
 
-            $this->se(underscore_field($cell->model, $cell->field))->trigger([
-                                                                                 'model' => $cell->model,
-                                                                                 'field' => $cell->field,
-                                                                                 'cell'  => $cell
-                                                                             ]);
+            $this->se($this->cell->underscore())->trigger([
+                                                              'cell' => $cell
+                                                          ]);
         }
     }
 }
